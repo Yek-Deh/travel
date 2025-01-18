@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\AdminCounterItemController;
 use App\Http\Controllers\Admin\AdminTeamMemberController;
 use App\Http\Controllers\Admin\AdminTestimonialController;
 use App\Http\Controllers\Admin\AdminTourController;
+use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminWelcomeItemController;
 use App\Http\Controllers\Front\FrontController;
 use App\Http\Controllers\User\UserController;
@@ -64,6 +65,9 @@ Route::middleware(['auth'])->prefix('user')->group(function () {
     Route::get('/review', [UserController::class, 'review'])->name('user_review');
     Route::get('/wishlist', [UserController::class, 'wishlist'])->name('user_wishlist');
     Route::get('/wishlist-delete/{id}', [UserController::class, 'wishlist_delete'])->name('user_wishlist_delete');
+    Route::get('/message', [UserController::class, 'message'])->name('user_message');
+    Route::get('/message-start', [UserController::class, 'message_start'])->name('user_message_start');
+    Route::post('/message-submit', [UserController::class, 'message_submit'])->name('user_message_submit');
 });
 
 //Admin
@@ -211,6 +215,11 @@ Route::middleware('admin')->prefix('admin')->group(function () {
     //Reviews Section
     Route::get('/review/index', [AdminReviewController::class, 'index'])->name('admin_review_index');
     Route::get('/review/delete/{id}', [AdminReviewController::class, 'delete'])->name('admin_review_delete');
+
+    //User Section
+    Route::get('/message', [AdminUserController::class, 'message'])->name('admin_message');
+    Route::get('/message-detail/{id}', [AdminUserController::class, 'message_detail'])->name('admin_message_detail');
+    Route::post('/message-submit/{id}', [AdminUserController::class, 'message_submit'])->name('admin_message_submit');
 
 
 });
