@@ -84,6 +84,20 @@
                                 class="fas fa-angle-right"></i> Message</a></li>
                 </ul>
             </li>
+
+            <li class="nav-item dropdown {{ Request::is('admin/subscribers') ||Request::is('admin/subscriber/send-email') ? 'active' : ''}}">
+                <a href="#" class="nav-link has-dropdown"><i
+                        class="fas fa-hand-point-right"></i><span>Subscriber Section</span></a>
+                <ul class="dropdown-menu">
+                    <li class="{{ Request::is('admin/subscribers') ? 'active' : ''}}"><a class="nav-link"
+                                                                                         href="{{route('admin_subscribers')}}"><i
+                                class="fas fa-angle-right"></i>All Subscribers</a>
+                    </li>
+                    <li class="{{ Request::is('admin/subscriber/send-email') ? 'active' : ''}}"><a class="nav-link"
+                                    href="{{route('admin_subscriber_send_email')}}"><i
+                                class="fas fa-angle-right"></i>Send Email</a></li>
+                </ul>
+            </li>
             <li class="{{ Request::is('admin/review/*') ? 'active' : ''}}"><a class="nav-link"
                                                                              href="{{route('admin_review_index')}}"><i
                         class="fas fa-hand-point-right"></i>
@@ -94,11 +108,18 @@
                         class="fas fa-hand-point-right"></i>
                     <span>Amenity</span></a></li>
 
+            <li class="{{ Request::is('admin/home-item/*') ? 'active' : ''}}"><a class="nav-link"
+                                                                                    href="{{route('admin_home_item_index')}}"><i
+                        class="fas fa-hand-point-right"></i>
+                    <span>Home Page Item</span></a></li>
+
+
             <li class="{{ Request::is('admin/profile') ? 'active' : ''}}"><a class="nav-link"
                                                                              href="{{route('admin_profile')}}"><i
                         class="fas fa-hand-point-right"></i>
                     <span>Profile</span></a>
             </li>
+
 
 
         </ul>

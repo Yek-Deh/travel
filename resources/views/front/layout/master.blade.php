@@ -80,7 +80,7 @@
                     <ul class="useful-links">
                         <li><a href="{{route('home')}}"><i class="fas fa-angle-right"></i> Home</a></li>
                         <li><a href="{{route('destinations')}}"><i class="fas fa-angle-right"></i> Destinations</a></li>
-                        <li><a href="packages.html"><i class="fas fa-angle-right"></i> Packages</a></li>
+                        <li><a href="{{route('packages')}}"><i class="fas fa-angle-right"></i> Packages</a></li>
                         <li><a href="{{route('blog')}}"><i class="fas fa-angle-right"></i> Blog</a></li>
                     </ul>
                 </div>
@@ -91,8 +91,8 @@
                     <ul class="useful-links">
                         <li><a href="{{route('faq')}}"><i class="fas fa-angle-right"></i> FAQ</a></li>
                         <li><a href="{{route('team_members')}}"><i class="fas fa-angle-right"></i> Terms of Use</a></li>
-                        <li><a href="privacy.html"><i class="fas fa-angle-right"></i> Privacy Policy</a></li>
-                        <li><a href="contact.html"><i class="fas fa-angle-right"></i> Contact</a></li>
+                        <li><a href=""><i class="fas fa-angle-right"></i> Privacy Policy</a></li>
+                        <li><a href=""><i class="fas fa-angle-right"></i> Contact</a></li>
                     </ul>
                 </div>
             </div>
@@ -137,9 +137,13 @@
                         To get the latest news from our website, please
                         subscribe us here:
                     </p>
-                    <form action="" method="post">
+                    <form action="{{route('subscriber_submit')}}" method="post">
+                        @csrf
                         <div class="form-group">
-                            <input type="text" name="" class="form-control" placeholder="Email Address">
+                            <input type="text" name="email" class="form-control" placeholder="Email Address">
+                            @error('email')
+                            <div class="alert alert-danger mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <input type="submit" class="btn btn-primary" value="Subscribe Now">

@@ -13,6 +13,7 @@ use App\Models\DestinationPhoto;
 use App\Models\DestinationVideo;
 use App\Models\Faq;
 use App\Models\Feature;
+use App\Models\HomeItem;
 use App\Models\Package;
 use App\Models\PackageAmenity;
 use App\Models\PackageFaq;
@@ -23,6 +24,7 @@ use App\Models\Payment;
 use App\Models\Post;
 use App\Models\Review;
 use App\Models\Slider;
+use App\Models\Subscriber;
 use App\Models\TeamMember;
 use App\Models\Testimonial;
 use App\Models\Tour;
@@ -47,7 +49,8 @@ class FrontController extends Controller
         $packages = Package::with(['destination', 'package_amenities', 'package_itineraries', 'tours', 'reviews'])
             ->orderBy('id', 'desc')->get()->take(3);
         $posts = Post::with('blog_category')->latest()->get()->take(3);   //just to show 3 items
-        return view('front.home', compact('sliders', 'welcome_item', 'features', 'testimonials', 'posts', 'destinations', 'packages'));
+        $home_item = HomeItem::where('id',1)->first();
+        return view('front.home', compact('sliders', 'welcome_item', 'features', 'testimonials', 'posts', 'destinations', 'packages', 'home_item'));
     }
 
     public function about()
@@ -294,15 +297,12 @@ class FrontController extends Controller
 //            $payment->payment_status = $response->status;
 //            $payment->payment_method = "Stripe";
 //            $payment->save();
-
-            return redirect()->back()->with('success', 'Payment is successful!');
-
             unset($_SESSION['tour_id']);
             unset($_SESSION['package_id']);
             unset($_SESSION['user_id']);
             unset($_SESSION['total_person']);
             unset($_SESSION['paid_amount']);
-
+            return redirect()->back()->with('success', 'Payment is successful!');
         } else {
             return redirect()->route('stripe_cancel');
         }
@@ -355,6 +355,45 @@ class FrontController extends Controller
 
         return redirect()->back()->with('success', 'Review is submitted successfully!');
 
+    }
+
+    public function subscriber_submit(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|unique:subscribers,email',
+        ]);
+
+        $token = hash('sha256', time());
+
+        $obj = new Subscriber;
+        $obj->email = $request->email;
+        $obj->token = $token;
+        $obj->status = 'Pending';
+        $obj->save();
+
+        $verification_link = route('subscriber_verify', ['email' => $request->email, 'token' => $token]);
+
+        $subject = 'Subscriber Verification';
+        $message = 'Please click the following link to verify your email address as subscriber :<br><a href="' . $verification_link . '">Verify Email</a>';
+
+        Mail::to($request->email)->send(new Websitemail($subject, $message));
+
+        return redirect()->back()->with('success', 'You are subscribed successfully. Please check your email to confirm the verification link.');
+
+    }
+
+    public function subscriber_verify($email, $token)
+    {
+
+        $subscriber = Subscriber::where('token', $token)->where('email', $email)->first();
+        if (!$subscriber) {
+            return redirect()->route('home');
+        }
+
+        $subscriber->token = '';
+        $subscriber->status = 'Active';
+        $subscriber->update();
+        return redirect()->route('home')->with('success', 'Your email is verified. You are subscribed now.');
     }
 
     public

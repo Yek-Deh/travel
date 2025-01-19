@@ -7,11 +7,13 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminDestinationController;
 use App\Http\Controllers\Admin\AdminFaqController;
 use App\Http\Controllers\Admin\AdminFeatureController;
+use App\Http\Controllers\Admin\AdminHomeItemController;
 use App\Http\Controllers\Admin\AdminPackageController;
 use App\Http\Controllers\Admin\AdminPostController;
 use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\AdminSliderController;
 use App\Http\Controllers\Admin\AdminCounterItemController;
+use App\Http\Controllers\Admin\AdminSubscriberController;
 use App\Http\Controllers\Admin\AdminTeamMemberController;
 use App\Http\Controllers\Admin\AdminTestimonialController;
 use App\Http\Controllers\Admin\AdminTourController;
@@ -41,7 +43,8 @@ Route::get('/stripe/success', [FrontController::class, 'stripe_success' ])->name
 Route::get ('/stripe/cancel', [FrontController:: class, 'stripe_cancel' ])->name('stripe_cancel');
 Route::post('/review/submit', [FrontController::class, 'review_submit'])->name('review_submit');
 Route::get('/wishlist/{package_id}', [FrontController::class, 'wishlist'])->name('wishlist');
-
+Route::post('/subscriber_submit', [FrontController::class, 'subscriber_submit'])->name('subscriber_submit');
+Route::get('/subscriber_verify/{email}/{token}', [FrontController::class, 'subscriber_verify'])->name('subscriber_verify');
 
 //Registration and Login
 Route::get('/registration', [FrontController::class, 'registration'])->name('registration');
@@ -220,6 +223,17 @@ Route::middleware('admin')->prefix('admin')->group(function () {
     Route::get('/message', [AdminUserController::class, 'message'])->name('admin_message');
     Route::get('/message-detail/{id}', [AdminUserController::class, 'message_detail'])->name('admin_message_detail');
     Route::post('/message-submit/{id}', [AdminUserController::class, 'message_submit'])->name('admin_message_submit');
+
+    //Subscriber Section
+    Route::get('/subscribers', [AdminSubscriberController::class, 'subscribers'])->name('admin_subscribers');
+    Route::get('/subscriber/send-email', [AdminSubscriberController::class, 'send_email'])->name('admin_subscriber_send_email');
+    Route::post('/subscriber/send-email/submit', [AdminSubscriberController::class, 'send_email_submit'])->name('admin_subscriber_send_email_submit');
+    Route::get('/subscriber/delete/{id}', [AdminSubscriberController::class, 'subscriber_delete'])->name('admin_subscriber_delete');
+
+    //Home Items Section
+    Route::get('/home-item/index', [AdminHomeItemController::class, 'index'])->name('admin_home_item_index');
+    Route::post('/home-item/update', [AdminHomeItemController::class, 'update'])->name('admin_home_item_update');
+
 
 
 });
