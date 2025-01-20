@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Mail\WebsiteMail;
+use App\Models\AboutItem;
 use App\Models\Admin;
 use App\Models\BlogCategory;
 use App\Models\Booking;
+use App\Models\ContactItem;
 use App\Models\CounterItem;
 use App\Models\Destination;
 use App\Models\DestinationPhoto;
@@ -26,6 +28,7 @@ use App\Models\Review;
 use App\Models\Slider;
 use App\Models\Subscriber;
 use App\Models\TeamMember;
+use App\Models\TermPrivacyItem;
 use App\Models\Testimonial;
 use App\Models\Tour;
 use App\Models\User;
@@ -49,8 +52,9 @@ class FrontController extends Controller
         $packages = Package::with(['destination', 'package_amenities', 'package_itineraries', 'tours', 'reviews'])
             ->orderBy('id', 'desc')->get()->take(3);
         $posts = Post::with('blog_category')->latest()->get()->take(3);   //just to show 3 items
-        $home_item = HomeItem::where('id',1)->first();
-        return view('front.home', compact('sliders', 'welcome_item', 'features', 'testimonials', 'posts', 'destinations', 'packages', 'home_item'));
+        $home_item = HomeItem::where('id', 1)->first();
+        return view('front.home', compact('sliders', 'welcome_item', 'features', 'testimonials',
+            'posts', 'destinations', 'packages', 'home_item'));
     }
 
     public function about()
@@ -58,7 +62,47 @@ class FrontController extends Controller
         $welcome_item = WelcomeItem::first();
         $features = Feature::all();
         $counter_item = CounterItem::first();
-        return view('front.about', compact('welcome_item', 'features', 'counter_item'));
+        $about_item = AboutItem::where('id', 1)->first();
+        return view('front.about', compact('welcome_item', 'features', 'counter_item', 'about_item'));
+    }
+
+    public function contact()
+    {
+        $contact_item = ContactItem::where('id', 1)->first();
+        return view('front.contact', compact('contact_item'));
+    }
+
+    public function contact_submit(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required| email',
+            'comment' => 'required',]);
+
+        $admin = Admin::where('id', 1)->first();
+
+        $subject = "Contact Form Message";
+        $message = "<b>Name: </b><br>" . $request->name . "<br><br>";
+        $message .= "<b>Email :</b><br>" . $request->email . "<br><br>";
+        $message .= "<b>Comment: </b><br>" . nl2br($request->comment) . "<br>";
+
+        Mail::to($admin->email)->send(new Websitemail($subject, $message));
+
+        return redirect()->back()->with('success', 'Your message is submitted successfully. We will contact you soon.');
+
+    }
+
+    public function terms()
+    {
+        $term_privacy_item = TermPrivacyItem::where('id', 1)->first();
+        return view('front.terms', compact('term_privacy_item'));
+
+    }
+
+    public function privacy()
+    {
+        $term_privacy_item = TermPrivacyItem::where('id', 1)->first();
+        return view('front.privacy', compact('term_privacy_item'));
     }
 
     public function team_members()

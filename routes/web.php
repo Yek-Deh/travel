@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminAboutItemController;
 use App\Http\Controllers\Admin\AdminAmenityController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminBlogCategoryController;
+use App\Http\Controllers\Admin\AdminContactItemController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminDestinationController;
 use App\Http\Controllers\Admin\AdminFaqController;
@@ -15,6 +17,7 @@ use App\Http\Controllers\Admin\AdminSliderController;
 use App\Http\Controllers\Admin\AdminCounterItemController;
 use App\Http\Controllers\Admin\AdminSubscriberController;
 use App\Http\Controllers\Admin\AdminTeamMemberController;
+use App\Http\Controllers\Admin\AdminTermPrivacyItemController;
 use App\Http\Controllers\Admin\AdminTestimonialController;
 use App\Http\Controllers\Admin\AdminTourController;
 use App\Http\Controllers\Admin\AdminUserController;
@@ -27,6 +30,8 @@ use Illuminate\Support\Facades\Route;
 //Pages
 Route::get('/', [FrontController::class, 'home'])->name('home');
 Route::get('/about', [FrontController::class, 'about'])->name('about');
+Route::get('/contact', [FrontController::class, 'contact'])->name('contact');
+Route::post('/contact/submit', [FrontController::class, 'contact_submit'])->name('contact_submit');
 Route::get('/team-members', [FrontController::class, 'team_members'])->name('team_members');
 Route::get('/team-member/{slug}', [FrontController::class, 'team_member'])->name('team_member');
 Route::get('/faq', [FrontController::class, 'faq'])->name('faq');
@@ -45,6 +50,8 @@ Route::post('/review/submit', [FrontController::class, 'review_submit'])->name('
 Route::get('/wishlist/{package_id}', [FrontController::class, 'wishlist'])->name('wishlist');
 Route::post('/subscriber_submit', [FrontController::class, 'subscriber_submit'])->name('subscriber_submit');
 Route::get('/subscriber_verify/{email}/{token}', [FrontController::class, 'subscriber_verify'])->name('subscriber_verify');
+Route::get('/terms-of-use', [FrontController::class, 'terms'])->name('terms');
+Route::get('/privacy-policy', [FrontController::class, 'privacy'])->name('privacy');
 
 //Registration and Login
 Route::get('/registration', [FrontController::class, 'registration'])->name('registration');
@@ -234,6 +241,17 @@ Route::middleware('admin')->prefix('admin')->group(function () {
     Route::get('/home-item/index', [AdminHomeItemController::class, 'index'])->name('admin_home_item_index');
     Route::post('/home-item/update', [AdminHomeItemController::class, 'update'])->name('admin_home_item_update');
 
+    //About Items Section
+    Route::get('/about-item/index', [AdminAboutItemController::class, 'index'])->name('admin_about_item_index');
+    Route::post('/about-item/update', [AdminAboutItemController::class, 'update'])->name('admin_about_item_update');
+
+    //Contact Items Section
+    Route::get('/term-privacy-item/index', [AdminTermPrivacyItemController::class, 'index'])->name('admin_term_privacy_item_index');
+    Route::post('/term-privacy-item/update', [AdminTermPrivacyItemController::class, 'update'])->name('admin_term_privacy_item_update');
+
+    //Term and Privacy Items Section
+    Route::get('/contact-item/index', [AdminContactItemController::class, 'index'])->name('admin_contact_item_index');
+    Route::post('/contact-item/update', [AdminContactItemController::class, 'update'])->name('admin_contact_item_update');
 
 
 });

@@ -52,7 +52,7 @@
         </div>
     @endif
 
-
+@if($about_item->feature_status == 'Show')
     {{-- Features Section --}}
     <div class="why-choose pt_70">
         <div class="container">
@@ -73,7 +73,7 @@
             </div>
         </div>
     </div>
-
+@endif
     {{-- Counter Section --}}
     @if($counter_item->status == 'Show')
     <div class="counter-section pt_70 pb_70">
