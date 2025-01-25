@@ -52,7 +52,7 @@ class AdminSliderController extends Controller
         $slider =  Slider::findOrFail($id);
         if ($request->photo) {
             $request->validate([
-                'photo' => ['mimes:jpeg,jpg,png'],
+                'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
             if ($slider->photo) {
                 unlink(public_path('uploads/') . $slider->photo);

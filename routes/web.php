@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\AdminHomeItemController;
 use App\Http\Controllers\Admin\AdminPackageController;
 use App\Http\Controllers\Admin\AdminPostController;
 use App\Http\Controllers\Admin\AdminReviewController;
+use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\AdminSliderController;
 use App\Http\Controllers\Admin\AdminCounterItemController;
 use App\Http\Controllers\Admin\AdminSubscriberController;
@@ -258,6 +259,10 @@ Route::middleware('admin')->prefix('admin')->group(function () {
     //Term and Privacy Items Section
     Route::get('/contact-item/index', [AdminContactItemController::class, 'index'])->name('admin_contact_item_index');
     Route::post('/contact-item/update', [AdminContactItemController::class, 'update'])->name('admin_contact_item_update');
+
+    //Setting Section
+    Route::get('/setting/index', [AdminSettingController::class, 'index'])->name('admin_setting_index');
+    Route::post('/setting/update', [AdminSettingController::class, 'update'])->name('admin_setting_update');
 
 
 });
